@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SIYU.YAO assessment3 — The personalisation tax</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23111513'/%3E%3Crect x='6' y='10' width='20' height='4' fill='%23B23A26'/%3E%3Crect x='6' y='18' width='12' height='4' fill='%23E7E8E2'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://miaoda.feishu.cn">
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --ink:#111513;
+    --paper:#E7E8E2;
+    --card:#F3F3EF;
+    --rule:#C6C8BD;
+    --rule-soft:#D6D8CE;
+    --signal:#B23A26;
+    --deep:#1E4E45;
+    --muted:#5E635B;
+    --serif:"Newsreader","Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+    --sans:"IBM Plex Sans","Segoe UI",system-ui,-apple-system,sans-serif;
+    --measure:60ch;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--sans);
+    font-size:16.5px;
+    line-height:1.62;
+    text-rendering:optimizeLegibility;
+  }
+  ::selection{background:var(--signal);color:#fff}
+
+  /* ===== 导航 ===== */
+  .rail{
+    position:sticky;top:0;z-index:20;
+    display:flex;align-items:center;gap:.9rem;flex-wrap:wrap;
+    padding:.7rem 1.1rem;
+    background:rgba(231,232,226,.92);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--rule);
+  }
+  .rail__mark{
+    display:flex;align-items:center;gap:.5rem;
+    font-family:var(--serif);font-size:1rem;letter-spacing:.01em;
+    margin-right:auto;
+  }
+  .rail__mark i{display:block;width:14px;height:14px;background:var(--signal)}
+  .rail a{
+    color:var(--ink);text-decoration:none;font-size:.82rem;
+    border-bottom:1px solid transparent;padding-bottom:2px;
+    white-space:nowrap;
+  }
+  .rail a:hover,.rail a:focus-visible{border-bottom-color:var(--signal)}
+  .rail__links{display:flex;gap:.9rem;flex-wrap:wrap}
+
+  /* ===== 封面 ===== */
+  .cover{background:var(--ink);color:var(--paper);padding:2.6rem 1.1rem 2.2rem}
+  .cover__inner{max-width:1120px;margin:0 auto;display:grid;gap:2rem}
+  .kicker{
+    font-size:.78rem;letter-spacing:.12em;color:#A9AEA4;
+    text-transform:none;
+  }
+  h1{
+    font-family:var(--serif);font-weight:400;
+    font-size:clamp(2.5rem,8.4vw,5.4rem);
+    line-height:.98;letter-spacing:-.02em;
+    margin:.7rem 0 0;max-width:16ch;
+  }
+  h1 em{font-style:italic;color:#E9A08F}
+  .deck{
+    font-family:var(--serif);font-size:clamp(1.05rem,2.4vw,1.34rem);
+    line-height:1.46;color:#D4D8CF;max-width:38ch;margin:1.1rem 0 0;
+  }
+  .case{
+    border-top:1px solid #38403B;margin-top:1.6rem;padding-top:.9rem;
+    display:grid;grid-template-columns:1fr;gap:.55rem .9rem;
+    font-size:.82rem;
+  }
+  .case dt{color:#9AA094;letter-spacing:.04em}
+  .case dd{margin:.1rem 0 0;color:#E7E8E2}
+
+  /* 录入面板 */
+  .record{
+    background:var(--card);color:var(--ink);padding:1rem 1rem 1.1rem;
+    border-left:3px solid var(--signal);
+  }
+  .record__head{
+    display:flex;justify-content:space-between;align-items:baseline;
+    font-family:var(--serif);font-size:1rem;border-bottom:1px solid var(--rule);
+    padding-bottom:.5rem;margin-bottom:.2rem;
+  }
+  .record__head span{font-family:var(--sans);font-size:.72rem;color:var(--muted)}
+  .row{display:grid;grid-template-columns:minmax(84px,38%) 1fr;gap:.6rem;padding:.5rem 0;border-bottom:1px dotted #C9CBC1;align-items:center}
+  .row:last-of-type{border-bottom:0}
+  .row b{font-weight:500;font-size:.78rem;color:var(--muted)}
+  .val{
+    display:inline-block;min-width:52%;height:1.05em;
+    background:var(--ink);color:transparent;border-radius:0;
+    transition:background-color .5s ease,color .5s ease;
+  }
+  .val.is-open{background:transparent;color:var(--signal);height:auto;transition-delay:var(--d,0s)}
+  .reveal{
+    margin-top:.9rem;width:100%;
+    display:inline-flex;justify-content:space-between;align-items:center;gap:.8rem;
+    font:inherit;font-size:.83rem;font-weight:500;
+    background:var(--ink);color:var(--card);border:0;
+    padding:.62rem .8rem;cursor:pointer;
+    min-height:44px;
+  }
+  .reveal:hover{background:var(--signal)}
+  .reveal svg{width:16px;height:16px;flex:none}
+
+  /* ===== 主体 ===== */
+  main{max-width:1120px;margin:0 auto;padding:0 1.1rem}
+  .sec{padding:2.4rem 0;border-bottom:1px solid var(--rule)}
+  .sec:last-of-type{border-bottom:0}
+  .sec__head{display:grid;gap:.35rem;margin-bottom:1.1rem}
+  .sec__label{
+    font-size:.76rem;letter-spacing:.1em;color:var(--signal);font-weight:600;
+  }
+  h2{
+    font-family:var(--serif);font-weight:500;letter-spacing:-.01em;
+    font-size:clamp(1.5rem,3.6vw,2.05rem);line-height:1.14;margin:0;
+    max-width:26ch;
+  }
+  p{margin:0 0 .9rem;max-width:var(--measure)}
+  p:last-child{margin-bottom:0}
+  .lead{font-size:1.06rem}
+  .drop::first-letter{
+    font-family:var(--serif);font-size:3.1em;line-height:.82;
+    float:left;padding:.06em .12em 0 0;color:var(--signal);
+  }
+  a.inline{color:var(--deep);text-decoration:underline;text-underline-offset:2px;text-decoration-color:var(--rule)}
+
+  /* 义务清单 */
+  .obligations{display:grid;gap:0;margin-top:.4rem;border-top:1px solid var(--rule)}
+  .obligation{
+    display:grid;grid-template-columns:1fr;gap:.25rem;
+    padding:.95rem 0;border-bottom:1px solid var(--rule);
+  }
+  .obligation b{font-family:var(--serif);font-size:1.08rem;font-weight:500}
+  .obligation span{color:var(--muted);font-size:.9rem}
+  .obligation cite{font-style:normal;color:var(--deep);font-size:.84rem}
+
+  /* 思考步骤 */
+  .steps{display:grid;gap:.55rem;margin-top:.3rem}
+  details.step{background:transparent;border:1px solid var(--rule);border-left:2px solid var(--deep)}
+  details.step[open]{background:var(--card)}
+  details.step summary{
+    cursor:pointer;list-style:none;padding:.85rem .9rem;
+    display:grid;grid-template-columns:auto 1fr auto;gap:.8rem;align-items:center;
+    min-height:48px;
+  }
+  details.step summary::-webkit-details-marker{display:none}
+  details.step .n{
+    font-family:var(--serif);font-size:1rem;color:var(--signal);
+    border:1px solid var(--rule);width:1.9rem;height:1.9rem;
+    display:grid;place-items:center;border-radius:50%;
+  }
+  details.step .t{font-family:var(--serif);font-size:1.08rem}
+  details.step .plus{
+    width:16px;height:16px;position:relative;transition:transform .25s ease;
+  }
+  details.step .plus::before,details.step .plus::after{
+    content:"";position:absolute;background:var(--muted);
+  }
+  details.step .plus::before{inset:7px 0 auto;height:2px}
+  details.step .plus::after{inset:0 7px;width:2px}
+  details.step[open] .plus{transform:rotate(45deg)}
+  details.step .body{padding:0 .9rem 1rem 3.7rem;font-size:.95rem;color:#2B302C}
+
+  /* 干系人表 */
+  table{width:100%;border-collapse:collapse;table-layout:fixed;margin-top:.4rem}
+  thead th{
+    text-align:left;font-family:var(--sans);font-size:.74rem;font-weight:600;
+    letter-spacing:.06em;color:var(--muted);padding-bottom:.5rem;
+    border-bottom:1px solid var(--ink);
+  }
+  tbody td{padding:.8rem .7rem .8rem 0;border-bottom:1px solid var(--rule);vertical-align:top;font-size:.93rem}
+  tbody th{
+    text-align:left;font-family:var(--serif);font-weight:500;font-size:1.02rem;
+    padding:.8rem .7rem .8rem 0;border-bottom:1px solid var(--rule);vertical-align:top;
+  }
+  thead th:nth-child(1),tbody th{width:26%}
+  thead th:nth-child(2){width:36%}
+  thead th:nth-child(3){width:38%}
+
+  /* 行动清单 */
+  .playbook{display:grid;gap:0;border-top:1px solid var(--ink);margin-top:.5rem}
+  .move{padding:1.05rem 0;border-bottom:1px solid var(--rule);display:grid;grid-template-columns:2.4rem 1fr;gap:.9rem}
+  .move__n{font-family:var(--serif);font-size:1.5rem;line-height:1;color:var(--signal);padding-top:.15rem}
+  .move h3{font-family:var(--serif);font-weight:500;font-size:1.12rem;margin:0 0 .3rem;letter-spacing:-.01em}
+  .move p{font-size:.94rem;margin:0;max-width:56ch}
+
+  /* 三条规则 */
+  .rules{display:grid;gap:.6rem;margin-top:.4rem}
+  .rule{
+    display:grid;grid-template-columns:2.2rem 1fr;gap:.85rem;align-items:start;
+    background:var(--card);border:1px solid var(--rule);padding:.85rem .9rem;
+    text-align:left;width:100%;font:inherit;cursor:pointer;min-height:52px;
+    transition:border-color .2s ease,background-color .2s ease;
+  }
+  .rule:hover{border-color:var(--deep)}
+  .rule[aria-pressed="true"]{border-color:var(--deep);background:#E2E6DF}
+  .tick{
+    width:1.35rem;height:1.35rem;border:1px solid var(--rule);margin-top:.25rem;
+    display:grid;place-items:center;
+  }
+  .tick svg{width:12px;height:12px;opacity:0;transition:opacity .2s ease}
+  .rule[aria-pressed="true"] .tick{border-color:var(--deep);background:var(--deep)}
+  .rule[aria-pressed="true"] .tick svg{opacity:1}
+  .rule span.txt{font-size:.98rem}
+  .count{font-size:.82rem;color:var(--muted);margin-top:.7rem}
+
+  /* 参考 */
+  .refs{padding:2.2rem 0 3rem}
+  h2.refs__h{font-size:1.15rem;margin-bottom:1rem}
+  .ref{display:grid;grid-template-columns:1fr;padding-left:1.6rem;text-indent:-1.6rem;font-size:.86rem;color:#333833;margin-bottom:.65rem;line-height:1.55}
+  footer{background:var(--ink);color:#A9AEA4;font-size:.78rem;padding:1.4rem 1.1rem}
+  footer div{max-width:1120px;margin:0 auto;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+
+  /* ===== 宽屏 ===== */
+  @media (min-width:760px){
+    .cover{padding:4.4rem 2rem 3rem}
+    .cover__inner{grid-template-columns:1.35fr .8fr;gap:3.4rem;align-items:start}
+    .case{grid-template-columns:auto 1fr}
+    main{padding:0 2rem}
+    .sec{padding:3.4rem 0}
+    .sec__head{grid-template-columns:.9fr 1.6fr;gap:1.4rem;align-items:baseline;margin-bottom:1.6rem}
+    .obligation{grid-template-columns:.85fr 1.7fr;gap:1.4rem;align-items:start}
+    .move{grid-template-columns:3rem 1fr;gap:1.4rem}
+  }
+  @media (min-width:1000px){
+    .sec__grid{display:grid;grid-template-columns:1.05fr 1fr;gap:2.6rem;align-items:start}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    *{transition:none!important;animation:none!important}
+  }
+  :focus-visible{outline:2px solid var(--signal);outline-offset:3px}
+
+  /* ===== 打印（交作业 PDF）===== */
+  @page{size:A4;margin:14mm 15mm}
+  @media print{
+    body{background:#fff;font-size:10.2pt;line-height:1.5}
+    .rail{position:static;background:#fff;border-bottom:1px solid #999;padding:0 0 6pt}
+    .rail__links{display:none}
+    .cover{background:#fff;color:#000;padding:0 0 14pt;border-bottom:2pt solid #111}
+    .cover__inner{grid-template-columns:1fr;gap:12pt}
+    h1{font-size:28pt;color:#000;max-width:none}
+    h1 em{color:#111}
+    .deck{color:#333}
+    .case dd,.kicker{color:#333}
+    .record{background:#fff;border:1pt solid #999;border-left:3pt solid #B23A26;page-break-inside:avoid}
+    .val{background:#111;color:transparent}
+    .reveal{display:none}
+    main{padding:0}
+    .sec{padding:12pt 0;page-break-inside:avoid}
+    .sec__grid{display:block}
+    details.step[open]{background:#fff}
+    details.step .body{display:block}
+    .rules{page-break-inside:avoid}
+    footer{background:#fff;color:#333;border-top:1pt solid #999}
+  }
+</style>
+</head>
+<body>
+
+<nav class="rail" aria-label="Sections">
+  <span class="rail__mark"><i aria-hidden="true"></i>The personalisation tax</span>
+  <div class="rail__links">
+    <a href="#technology">Technology</a>
+    <a href="#dilemma">Dilemma</a>
+    <a href="#obligations">Obligations</a>
+    <a href="#method">Method</a>
+    <a href="#people">People</a>
+    <a href="#playbook">Playbook</a>
+    <a href="#references">References</a>
+  </div>
+</nav>
+
+<header class="cover">
+  <div class="cover__inner">
+    <div>
+      <p class="kicker">Assessment 3 · Business and accounting · Dilemma two</p>
+      <h1>When the engine <em>sells</em> the customer</h1>
+      <p class="deck">A tourism company built an AI recommender to sell holidays. It also leaked the people who bought them. Here is how I would act, and how you should act next.</p>
+      <dl class="case">
+        <dt>Profession</dt><dd>Business and accounting</dd>
+        <dt>Technology</dt><dd>AI recommendation engine, third-party enriched</dd>
+        <dt>Dilemma</dt><dd>Customer breaches head office will not investigate</dd>
+        <dt>Method</dt><dd>Computational thinking, then judgement</dd>
+      </dl>
+    </div>
+
+    <aside class="record" aria-labelledby="recordTitle">
+      <div class="record__head"><span id="recordTitle">Customer record — enriched</span><span>ref 4471</span></div>
+      <div class="row"><b>Field</b><b>Value held</b></div>
+      <div class="row"><b>Email</b><span class="val" style="--d:0s">traveller4471@mail.com</span></div>
+      <div class="row"><b>Mobile</b><span class="val" style="--d:.12s">+61 4•• ••• 219</span></div>
+      <div class="row"><b>Trip dates</b><span class="val" style="--d:.24s">14–27 Dec</span></div>
+      <div class="row"><b>Card</b><span class="val" style="--d:.36s">•••• 8842</span></div>
+      <div class="row"><b>Passport</b><span class="val" style="--d:.48s">issued 2019</span></div>
+      <button class="reveal" id="revealBtn" type="button" aria-pressed="false" aria-describedby="revealNote">
+        <span id="revealLabel">Reveal what the engine held</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2 12s3.5-6.5 10-6.5S22 12 22 12s-3.5 6.5-10 6.5S2 12 2 12Z"/><circle cx="12" cy="12" r="2.6"/></svg>
+      </button>
+      <p id="revealNote" style="font-size:.76rem;color:#5E635B;margin:.55rem 0 0">Six fields matched a customer to a fraud list sold elsewhere.</p>
+    </aside>
+  </div>
+</header>
+
+<main>
+
+<!-- ===== 技术 ===== -->
+<section class="sec" id="technology">
+  <div class="sec__head">
+    <p class="sec__label">What the technology does</p>
+    <h2>Personalisation is a supply chain, not a feature</h2>
+  </div>
+  <div class="sec__grid">
+    <div>
+      <p class="lead drop">Recommendation engines are standard practice in tourism and retail. Collaborative filtering matches a traveller against millions of earlier bookings, then enrichment services attach browsing history, review sentiment and social data to sharpen the prediction. Relevance raises conversion; conversion pays for the pipeline.</p>
+    </div>
+    <div>
+      <p>The ethical risk is equally simple. Every enrichment step adds a party holding customer information, and a new point where consent, access control and retention can fail (Shackel &amp; Smith, 2025). Exposed data is a target, not an accident: 69% of 2024 breach notifications came from malicious or criminal attacks (<abbr title="Office of the Australian Information Commissioner">OAIC</abbr>, 2025b).</p>
+      <p>When an engine is treated as a product to buy rather than a process to govern, nobody owns its failures.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 困境 ===== -->
+<section class="sec" id="dilemma">
+  <div class="sec__head">
+    <p class="sec__label">The dilemma</p>
+    <h2>A finding nobody senior wants to hear</h2>
+  </div>
+  <div class="sec__grid">
+    <div>
+      <p>Customers who booked through the engine began reporting phishing emails, texts and bank fraud matching details they had entered. I raised it. Head office was not interested, and I could not tell customers to stop using the product.</p>
+      <p>The decision was not whether to feel uneasy. It was what to do with a finding the people with authority had already dismissed.</p>
+    </div>
+    <div>
+      <p>Three details make this a dilemma rather than a complaint. The harm is invisible until it reaches a customer. The evidence sits in systems I can read but not control. And the person expected to act holds less power than those who caused the exposure.</p>
+      <p>Ethics rarely collapses because someone chooses evil. It collapses because responsibility is spread wider than accountability.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 义务 ===== -->
+<section class="sec" id="obligations">
+  <div class="sec__head">
+    <p class="sec__label">Ethical considerations</p>
+    <h2>Four obligations, none of them optional</h2>
+  </div>
+
+  <div class="obligations">
+    <div class="obligation">
+      <b>Integrity and objectivity</b>
+      <div><span>A finding cannot be softened because a superior finds it inconvenient. Deference is not neutrality.</span><br><cite>APES 110, ss. 110.1–110.2</cite></div>
+    </div>
+    <div class="obligation">
+      <b>Confidentiality</b>
+      <div><span>Customer data cannot be disclosed again, which rules out investigating by exporting the dataset to personal tools.</span><br><cite>APES 110, s. 140.1</cite></div>
+    </div>
+    <div class="obligation">
+      <b>Privacy and security duties</b>
+      <div><span>Reasonable technical and organisational steps must secure personal information, and a suspected eligible breach assessed within 30 days.</span><br><cite>Privacy Act 1988 (Cth), sch 1 cl 11; pt IIIC</cite></div>
+    </div>
+    <div class="obligation">
+      <b>Professional behaviour</b>
+      <div><span>Reputational and public-interest costs belong inside the decision, not to a media cycle three weeks later.</span><br><cite>APES 110, s. 110.5</cite></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 方法 ===== -->
+<section class="sec" id="method">
+  <div class="sec__head">
+    <p class="sec__label">Deconstructing it</p>
+    <h2>Computational thinking, four moves</h2>
+  </div>
+  <p style="margin-bottom:1.1rem">The brief pairs computational thinking with human judgement: the method locates the problem, judgement decides the response. Open each step.</p>
+
+  <div class="steps">
+    <details class="step">
+      <summary><span class="n">1</span><span class="t">Decomposition</span><span class="plus" aria-hidden="true"></span></summary>
+      <div class="body">Split the event into four questions: what data flowed in, who received it, which control failed, and who owns that control. Ambiguity survives only while the problem stays whole.</div>
+    </details>
+    <details class="step">
+      <summary><span class="n">2</span><span class="t">Pattern recognition</span><span class="plus" aria-hidden="true"></span></summary>
+      <div class="body">Breaches repeat a few patterns: over-broad access, third-party enrichment, no retention limit, no audit trail. The national data shows the same causes recurring across sectors (OAIC, 2025b).</div>
+    </details>
+    <details class="step">
+      <summary><span class="n">3</span><span class="t">Abstraction</span><span class="plus" aria-hidden="true"></span></summary>
+      <div class="body">Strip out the features until one rule remains: a customer's data may only reach a party that has agreed, in writing, to protect it. The algorithm, the dashboard, the campaign — all detail.</div>
+    </details>
+    <details class="step">
+      <summary><span class="n">4</span><span class="t">Algorithm design</span><span class="plus" aria-hidden="true"></span></summary>
+      <div class="body">Turn the rule into a sequence any employee can run without permission: verify, log, escalate, notify, remediate. A response that depends on one person's courage is not a control; it is a hope.</div>
+    </details>
+  </div>
+</section>
+
+<!-- ===== 干系人 ===== -->
+<section class="sec" id="people">
+  <div class="sec__head">
+    <p class="sec__label">Who carries the cost</p>
+    <h2>Four stakeholders, four different losses</h2>
+  </div>
+  <table>
+    <colgroup><col style="width:26%"><col style="width:36%"><col style="width:38%"></colgroup>
+    <thead><tr><th scope="col">Stakeholder</th><th scope="col">What they lose</th><th scope="col">What they need from me</th></tr></thead>
+    <tbody>
+      <tr><th scope="row">Customers</th><td>Money, identity data and confidence in every booking.</td><td>Plain-language notice and a remedy they can verify.</td></tr>
+      <tr><th scope="row">The company</th><td>Penalties up to $50 million, remediation costs and lost custom (Strzelecki &amp; Rizun, 2022; OAIC, 2025a).</td><td>A documented risk decision, not an undocumented silence.</td></tr>
+      <tr><th scope="row">The profession</th><td>Credibility of "data-driven" advice, which rests on members who test claims rather than defer to vendors.</td><td>Evidence, escalation and a record that survives audit.</td></tr>
+      <tr><th scope="row">Community and regulator</th><td>The fraud, complaints and cleanup cost of a breach it never sees.</td><td>Notification inside the statutory scheme, so harm can be contained.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ===== 行动 ===== -->
+<section class="sec" id="playbook">
+  <div class="sec__head">
+    <p class="sec__label">How I would circumvent it</p>
+    <h2>Five moves, in this order</h2>
+  </div>
+
+  <div class="playbook">
+    <div class="move"><span class="move__n">1</span><div><h3>Verify before you accuse</h3><p>Reproduce the data path, take a sample I am authorised to hold, and record dates, systems and volumes. A dated log is harder to dismiss than a concern.</p></div></div>
+    <div class="move"><span class="move__n">2</span><div><h3>Put it in writing</h3><p>Escalate to risk and compliance, copy the audit committee, and ask for a decision in writing. A written refusal makes the risk an institutional fact someone must own.</p></div></div>
+    <div class="move"><span class="move__n">3</span><div><h3>Meet the legal clock</h3><p>Treat suspicion as the trigger: assess within 30 days and, if eligible, notify the regulator and affected customers (Privacy Act 1988 (Cth), pt IIIC). Notification is a duty, not a public-relations choice.</p></div></div>
+    <div class="move"><span class="move__n">4</span><div><h3>Contain, then tell the truth</h3><p>Revoke excess permissions, end enrichment with vendors that cannot evidence security, and tell affected customers what happened and what changed. Silence protects the company for a week, then damages it for a decade (Labrecque et al., 2021).</p></div></div>
+    <div class="move"><span class="move__n">5</span><div><h3>Redesign, and escalate if blocked</h3><p>Add consent, data minimisation, retention limits and human review of high-risk recommendations. If leadership still refuses, make a protected disclosure under the Corporations Act 2001 (Cth), pt 9.4AAA.</p></div></div>
+  </div>
+</section>
+
+<!-- ===== 带走 ===== -->
+<section class="sec" id="take">
+  <div class="sec__head">
+    <p class="sec__label">For the next person</p>
+    <h2>Three rules to take with you</h2>
+  </div>
+  <p style="margin-bottom:.9rem">Tap each rule to keep it.</p>
+  <div class="rules" role="group" aria-label="Rules to remember">
+    <button class="rule" type="button" aria-pressed="false">
+      <span class="tick" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#F3F3EF" stroke-width="2.4"><path d="M4 13l5 5L20 6"/></svg></span>
+      <span class="txt">Test the vendor's claim, not its reputation: ask for security evidence, not the sales deck.</span>
+    </button>
+    <button class="rule" type="button" aria-pressed="false">
+      <span class="tick" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#F3F3EF" stroke-width="2.4"><path d="M4 13l5 5L20 6"/></svg></span>
+      <span class="txt">Write the decision down; silence is still a decision, just one with no author.</span>
+    </button>
+    <button class="rule" type="button" aria-pressed="false">
+      <span class="tick" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#F3F3EF" stroke-width="2.4"><path d="M4 13l5 5L20 6"/></svg></span>
+      <span class="txt">Protect the customer before the quarter: the quarter recovers, a passport number does not.</span>
+    </button>
+  </div>
+  <p class="count" id="ruleCount">0 of 3 kept</p>
+</section>
+
+<!-- ===== 参考文献 ===== -->
+<section class="refs" id="references">
+  <h2 class="refs__h">References</h2>
+  <div class="ref">Accounting Professional &amp; Ethical Standards Board. (2018). <i>APES 110 code of ethics for professional accountants (including independence standards)</i>. https://apesb.org.au/standards-guidance/apes-110-code-of-ethics/</div>
+  <div class="ref"><i>Corporations Act 2001</i> (Cth).</div>
+  <div class="ref">Labrecque, L. I., Markos, E., Swani, K., &amp; Peña, P. (2021). When data security goes wrong: Examining the impact of stress, social contract violation, and data type on consumer coping responses following a data breach. <i>Journal of Business Research, 135</i>, 559–571. https://doi.org/10.1016/j.jbusres.2021.06.054</div>
+  <div class="ref">Office of the Australian Information Commissioner. (2025a, October 9). <i>Australian Clinical Labs ordered to pay penalties in relation to MedLab Pathology data breach in first for Privacy Act</i> [Media release]. https://www.oaic.gov.au/news/media-centre/australian-clinical-labs-ordered-to-pay-penalties-in-relation-to-medlab-pathology-data-breach-in-first-for-privacy-act</div>
+  <div class="ref">Office of the Australian Information Commissioner. (2025b). <i>Notifiable data breaches report: July to December 2024</i>. https://www.oaic.gov.au/__data/assets/pdf_file/0021/251184/Notifiable-data-breaches-report-July-to-December-2024.pdf</div>
+  <div class="ref">Office of the Australian Information Commissioner. (2026, July 6). <i>Data breach notifications increase to all-time high in 2025, new NDB stats show</i> [Media release]. https://www.oaic.gov.au/news/media-centre/data-breach-notifications-increase-to-all-time-high-in-2025,-new-NDB-stats-show</div>
+  <div class="ref"><i>Privacy Act 1988</i> (Cth).</div>
+  <div class="ref">Shackel, L., &amp; Smith, M. (2025). Australian privacy law, extraterritoriality, and regulating data collected by offshore direct-to-consumer genetic testing companies. <i>International Data Privacy Law, 15</i>(3), 282–293. https://doi.org/10.1093/idpl/ipaf016</div>
+  <div class="ref">Strzelecki, A., &amp; Rizun, M. (2022). Consumers' change in trust and security after a personal data breach in online shopping. <i>Sustainability, 14</i>(10), 5866. https://doi.org/10.3390/su14105866</div>
+</section>
+
+</main>
+
+<footer>
+  <div>
+    <span>The personalisation tax · Assessment 3 · Business and accounting</span>
+    <span>AI in the profession · ethical dilemma · stakeholder analysis · solutions</span>
+  </div>
+</footer>
+
+<script>
+  /* 录入面板：逐条揭示被系统持有的字段 */
+  (function(){
+    var btn = document.getElementById('revealBtn');
+    var label = document.getElementById('revealLabel');
+    var vals = document.querySelectorAll('.val');
+    var open = false;
+    btn.addEventListener('click', function(){
+      open = !open;
+      btn.setAttribute('aria-pressed', String(open));
+      label.textContent = open ? 'Hide the fields' : 'Reveal what the engine held';
+      for (var i=0;i<vals.length;i++){
+        vals[i].classList.toggle('is-open', open);
+      }
+    });
+  })();
+
+  /* 三条规则：可点选，带计数 */
+  (function(){
+    var rules = document.querySelectorAll('.rule');
+    var out = document.getElementById('ruleCount');
+    function refresh(){
+      var kept = 0;
+      for (var i=0;i<rules.length;i++){
+        if (rules[i].getAttribute('aria-pressed') === 'true') kept++;
+      }
+      out.textContent = kept + ' of ' + rules.length + ' kept';
+    }
+    for (var i=0;i<rules.length;i++){
+      rules[i].addEventListener('click', function(){
+        var on = this.getAttribute('aria-pressed') === 'true';
+        this.setAttribute('aria-pressed', String(!on));
+        refresh();
+      });
+    }
+    refresh();
+  })();
+</script>
+</body>
+</html>
