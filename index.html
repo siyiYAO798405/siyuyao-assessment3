@@ -219,7 +219,7 @@
   /* 参考 */
   .refs{padding:2.2rem 0 3rem}
   h2.refs__h{font-size:1.15rem;margin-bottom:1rem}
-  .ref{display:grid;grid-template-columns:1fr;padding-left:1.6rem;text-indent:-1.6rem;font-size:.86rem;color:#333833;margin-bottom:.65rem;line-height:1.55}
+  .ref{display:block;padding-left:1.6rem;text-indent:-1.6rem;font-size:.86rem;color:#333833;margin-bottom:.65rem;line-height:1.55}
   footer{background:var(--ink);color:#A9AEA4;font-size:.78rem;padding:1.4rem 1.1rem}
   footer div{max-width:1120px;margin:0 auto;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap}
 
@@ -256,13 +256,20 @@
     .deck{color:#333}
     .case dd,.kicker{color:#333}
     .record{background:#fff;border:1pt solid #999;border-left:3pt solid #B23A26;page-break-inside:avoid}
-    .val{background:#111;color:transparent}
+    .val{background:transparent;color:#111;height:auto}
     .reveal{display:none}
     main{padding:0}
-    .sec{padding:12pt 0;page-break-inside:avoid}
+    p{max-width:none}
+    .sec{padding:10pt 0;page-break-inside:auto}
+    .sec__head{margin-bottom:8pt}
+    .obligation,.move,.rule,tr,.ref{page-break-inside:avoid}
+    .steps,.rules,.playbook,.obligations{display:block}
+    details.step{margin-bottom:6pt;page-break-inside:avoid}
+    .count{display:none}
     .sec__grid{display:block}
-    details.step[open]{background:#fff}
     details.step .body{display:block}
+    details.step .plus{display:none}
+    details.step{border-left-color:#999}
     .rules{page-break-inside:avoid}
     footer{background:#fff;color:#333;border-top:1pt solid #999}
   }
